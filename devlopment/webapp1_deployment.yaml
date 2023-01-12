@@ -6,7 +6,7 @@ metadata:
   name: my-web-app1
   namespace: my-apps
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       k8s-app: my-web-app1
@@ -16,8 +16,8 @@ spec:
         k8s-app: my-web-app1
     spec:
       containers:
-      - name: go-app-container
-        image: mpratigyan/go-web-app:latest
+      - name: my-web-app1
+        image: mpratigyan/go-web-app
         resources:
           limits:
             memory: "128Mi"
