@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: my-web-app2
+  name: my-web-app2
+  namespace: my-apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: my-web-app2
+  template:
+    metadata:
+      labels:
+        k8s-app: my-web-app2
+    spec:
+      containers:
+      - name: my-web-app2
+        image: mpratigyan/my-app
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    k8s-app: my-web-app2
+  name: my-web-app2
+  namespace: my-apps
+spec:
+  selector:
+    k8s-app: my-web-app2    
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
