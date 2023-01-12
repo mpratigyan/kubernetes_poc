@@ -3,8 +3,10 @@ kind: Deployment
 metadata:
   name: my-web-app1
   namespace: my-apps
+  labels:
+    app: my-web-app1
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: my-web-app1
@@ -15,7 +17,7 @@ spec:
     spec:
       containers:
       - name: go-app-container
-        image: mpratigyan/go-web-app:latest
+        image: mpratigyan/go-web-app
         resources:
           limits:
             memory: "128Mi"
