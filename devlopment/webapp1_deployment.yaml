@@ -26,6 +26,7 @@ spec:
         - containerPort: 3000
 
 ---
+
 kind: Service
 apiVersion: v1
 metadata:
@@ -37,6 +38,6 @@ spec:
   selector:
     k8s-app: my-web-app1       
   ports:
-    -protocol: TCP
-     port: 3000
-     targetPort: 3000
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
