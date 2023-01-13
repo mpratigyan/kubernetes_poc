@@ -6,16 +6,16 @@ type: Opaque
 data:
    ROOT_PASSWORD: TXlzcWwtMQ==
 ---
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
- name: sc-local
-provisioner: k8s.io/minikube-hostpath
-parameters:
- {}
-reclaimPolicy: Delete
-volumeBindingMode: Immediate
-allowVolumeExpansion: false
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#  name: sc-local
+# provisioner: k8s.io/minikube-hostpath
+# parameters:
+#  {}
+# reclaimPolicy: Delete
+# volumeBindingMode: Immediate
+# allowVolumeExpansion: false
 ---
 apiVersion: v1
 kind: Service
@@ -61,16 +61,16 @@ spec:
                secretKeyRef: 
                 key: mysecret
                 name: ROOT_PASSWORD
-          volumeMounts:
-            - name: data
-              mountPath: /mnt/data
-  volumeClaimTemplates:
-    - metadata:
-        name: data
-      spec:
-        storageClassName: sc-local
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 5Gi 
+  #         volumeMounts:
+  #           - name: data
+  #             mountPath: /mnt/data
+  # volumeClaimTemplates:
+  #   - metadata:
+  #       name: data
+  #     spec:
+  #       storageClassName: sc-local
+  #       accessModes:
+  #         - ReadWriteOnce
+  #       resources:
+  #         requests:
+  #           storage: 5Gi 
