@@ -6,18 +6,18 @@ type: Opaque
 data:
    ROOT_PASSWORD: cGFzc3dvcmQ=
 
----
+# ---
 
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
- name: sc-local
-provisioner: k8s.io/minikube-hostpath
-parameters:
- {}
-reclaimPolicy: Delete
-volumeBindingMode: Immediate
-allowVolumeExpansion: false
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#  name: sc-local
+# provisioner: k8s.io/minikube-hostpath
+# parameters:
+#  {}
+# reclaimPolicy: Delete
+# volumeBindingMode: Immediate
+# allowVolumeExpansion: false
 
 ---
 
@@ -28,7 +28,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: sc-local
+  storageClassName: manual
   capacity:
     storage: 5Gi
   accessModes:
@@ -43,7 +43,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
 spec:
-  storageClassName: sc-local
+  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:
