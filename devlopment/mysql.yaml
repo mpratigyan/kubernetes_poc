@@ -5,52 +5,7 @@ metadata:
 type: Opaque
 data:
    ROOT_PASSWORD: cGFzc3dvcmQ=
-
-# ---
-
-# apiVersion: storage.k8s.io/v1
-# kind: StorageClass
-# metadata:
-#  name: sc-local
-# provisioner: k8s.io/minikube-hostpath
-# parameters:
-#  {}
-# reclaimPolicy: Delete
-# volumeBindingMode: Immediate
-# allowVolumeExpansion: false
-
-# ---
-
-# apiVersion: v1
-# kind: PersistentVolume
-# metadata:
-#   name: mysql-pv-volume
-#   labels:
-#     type: local
-# spec:
-#   storageClassName: manual
-#   capacity:
-#     storage: 5Gi
-#   accessModes:
-#     - ReadWriteOnce
-#   hostPath:
-#     path: "/mnt/data"
-
-# ---
-
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: mysql-pv-claim
-# spec:
-#   storageClassName: manual
-#   accessModes:
-#     - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 5Gi
-# ---
-
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -69,34 +24,35 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
- name: mysql
+  name: mysql
 spec:
- selector:
-   matchLabels:
-     app: mysql
- serviceName: mysql
- replicas: 1
- template:
-   metadata:
-     labels:
-       app: mysql
-   spec:
-     terminationGracePeriodSeconds: 10
-     containers:
-     - name: mysql
-       image: mysql:8
-       ports:
-       - containerPort: 3306
-         name: mysql
-       env:
-       - name: MYSQL_ROOT_PASSWORD
-         valueFrom:
-           secretKeyRef:
-             name: mysecret
-             key: password
-       volumeMounts:
-       - mountPath: /mnt/data
-         name: data   
+  replicas: 1
+  serviceName: mysql
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mysql
+          image: mysql:8
+          ports:
+            - name: tpc
+              protocol: TCP
+              containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+               secretKeyRef: 
+                key: mysecret
+                name: ROOT_PASSWORD
+          volumeMounts:
+            - name: data
+              mountPath: /mnt/data
   volumeClaimTemplates:
     - metadata:
         name: data
@@ -106,4 +62,4 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 5Gi
+            storage: 5Gi 
