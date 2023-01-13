@@ -74,3 +74,100 @@
 #   #       resources:
 #   #         requests:
 #   #           storage: 5Gi 
+
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-password
+  namespace: database
+type: opaque
+stringData:
+  MYSQL_ROOT_PASSWORD: password
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+  namespace: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  hostPath:
+    path: /var/lib/mysql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: database
+  labels:
+    app: mysql
+spec:
+  ports:
+  - port: 3306
+  clusterIP: None
+  selector:
+    app: mysql
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: database
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  serviceName: "mysql"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mysql
+        image: mysql:8
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-store
+          mountPath: /mnt/data
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-password
+                key: MYSQL_ROOT_PASSWORD
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-store
+    spec:
+      accessModes: 
+        - ReadWriteOnce
+      storageClassName: "manual"
+      resources:
+        requests:
+          storage: 5Gi
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql-client
+  namespace: database  
+spec:
+  containers:
+  - name: mysql-container
+    image: alpine
+    command: ['sh','-c', "sleep 1800m"]
+    imagePullPolicy: IfNotPresent
