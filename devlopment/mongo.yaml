@@ -50,7 +50,6 @@ spec:
      labels:
        app: mongodb
    spec:
-     terminationGracePeriodSeconds: 10
      containers:
      - name: mongodb
        image: mongo:4.0
