@@ -6,6 +6,17 @@ type: Opaque
 data:
    ROOT_PASSWORD: TXlzcWwtMQ==
 ---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+ name: sc-local
+provisioner: k8s.io/minikube-hostpath
+parameters:
+ {}
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+allowVolumeExpansion: false
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -57,7 +68,7 @@ spec:
     - metadata:
         name: data
       spec:
-        storageClassName: standard
+        storageClassName: sc-local
         accessModes:
           - ReadWriteOnce
         resources:
