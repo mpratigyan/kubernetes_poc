@@ -19,37 +19,37 @@ data:
 # volumeBindingMode: Immediate
 # allowVolumeExpansion: false
 
----
+# ---
 
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: mysql-pv-volume
-  labels:
-    type: local
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/mnt/data"
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: mysql-pv-volume
+#   labels:
+#     type: local
+# spec:
+#   storageClassName: manual
+#   capacity:
+#     storage: 5Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   hostPath:
+#     path: "/mnt/data"
 
----
+# ---
 
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mysql-pv-claim
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
----
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: mysql-pv-claim
+# spec:
+#   storageClassName: manual
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 5Gi
+# ---
 
 apiVersion: v1
 kind: Service
@@ -100,15 +100,16 @@ spec:
        volumeMounts:
        - mountPath: /var/lib/mysql
          name: data
-       volumes:
-       - name: mysql-volume
-         PersistentVolumeClaim: mysql-pv-claim     
-#  volumeClaimTemplates:
-#  - metadata:
-#      name: volume-claim
-#    spec:
-#      storageClassName: sc-local
-#      accessModes: [ "ReadWriteOnce" ]
-#      resources:
-#        requests:
-#          storage: 1Gi
+      #  volumes:
+      #  - name: mysql-volume
+      #    PersistentVolumeClaim: mysql-pv-claim     
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        storageClassName: standard
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
