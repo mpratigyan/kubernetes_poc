@@ -101,9 +101,8 @@ spec:
        - mountPath: /var/lib/mysql
          name: data
        volumes:
-         -name: mysql-volume
-          PersistentVolumeClaim:
-               mysql-pv-claim     
+       - name: mysql-volume
+         PersistentVolumeClaim: mysql-pv-claim     
 #  volumeClaimTemplates:
 #  - metadata:
 #      name: volume-claim
