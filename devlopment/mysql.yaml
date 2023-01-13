@@ -98,7 +98,7 @@ spec:
        - name: MYSQL_DATABASE
          value: "poc_db"
        volumeMounts:
-       - mountPath: /var/lib/mysql
+       - mountPath: /mnt/data
          name: data
       #  volumes:
       #  - name: mysql-volume
