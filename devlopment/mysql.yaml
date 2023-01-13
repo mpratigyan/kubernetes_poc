@@ -96,7 +96,7 @@ spec:
              name: mysecret
              key: password
        - name: MYSQL_DATABASE
-         value: "poc_db"
+         value: poc_db
        volumeMounts:
        - mountPath: /mnt/data
          name: data
