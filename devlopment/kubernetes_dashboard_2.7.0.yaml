@@ -46,6 +46,24 @@ spec:
 ---
 
 apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-dashboard-lb
+  namespace: kubernetes-dashboard
+  labels:
+    app: kubernetes-dashboard
+spec:
+  selector:
+    app: kubernetes-dashboard
+  type: NodePort
+  ports:
+    - port: 443
+      targetPort: 8443
+      nodePort: 30443
+
+---
+
+apiVersion: v1
 kind: Secret
 metadata:
   labels:
@@ -202,6 +220,8 @@ spec:
             # If not specified, Dashboard will attempt to auto discover the API server and connect
             # to it. Uncomment only if the default does not work.
             # - --apiserver-host=http://my-address:port
+            - --token-ttl=86400 # <-- add this with your timeout
+      image: kubernetesui/dashboard:v2.0.0
           volumeMounts:
             - name: kubernetes-dashboard-certs
               mountPath: /certs
